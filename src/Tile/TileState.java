@@ -5,6 +5,7 @@ package Tile;
  */
 public enum TileState {
     defaultTile,
+    target,
     untouchable,
     gate,
     openGate
