@@ -14,13 +14,8 @@ public class LockedBall extends Ball {
 
     }
 
-    public void ChangeBallType()
-    {
-
-    }
-
     public void ChangeBallType(BallState ballState)
     {
-
+        super.ChangeBallType(ballState);
     }
 }

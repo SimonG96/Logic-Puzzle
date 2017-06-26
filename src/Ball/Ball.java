@@ -8,15 +8,21 @@ public abstract class Ball {
     public Ball(BallState ballState, int positionX, int positionY)
     {
         BallState = ballState;
+        PreviousBallState = null;
+        StartingPositionX = positionX;
         PositionX = positionX;
+        StartingPositionY = positionY;
         PositionY = positionY;
         ID = 0; //TODO: Set ID to next available ID
     }
 
-    private final int ID;
-    private BallState BallState;
-    private int PositionX;
-    private int PositionY;
+    protected final int ID;
+    protected BallState BallState;
+    protected BallState PreviousBallState;
+    protected int PositionX;
+    protected int PositionY;
+    protected final int StartingPositionX;
+    protected final int StartingPositionY;
 
     public int GetID()
     {
@@ -26,6 +32,11 @@ public abstract class Ball {
     public BallState GetState()
     {
         return BallState;
+    }
+
+    public BallState GetPreviousBallState()
+    {
+        return PreviousBallState;
     }
 
     public int GetPositionX()
@@ -38,14 +49,19 @@ public abstract class Ball {
         return PositionY;
     }
 
+    public int GetStartingPositionX()
+    {
+        return StartingPositionX;
+    }
+
+    public int GetStartingPositionY()
+    {
+        return StartingPositionY;
+    }
+
     public boolean IsActivated()
     {
-        if (BallState == BallState.controlled)
-        {
-            return true;
-        }
-
-        return false;
+        return BallState == BallState.controlled;
     }
 
     public void MoveLeft()
@@ -68,7 +84,11 @@ public abstract class Ball {
 
     }
 
+    public void ChangeBallType(BallState ballState)
+    {
+        PreviousBallState = BallState;
+        BallState = ballState;
+    }
+
     abstract void Activate();
-    abstract void ChangeBallType();
-    abstract void ChangeBallType(BallState ballState);
 }

@@ -9,18 +9,34 @@ public class IdleBall extends Ball {
         super(BallState.idle, positionX, positionY);
     }
 
-    public void Activate()
+    public void MoveLeft()
     {
-
+        throw new IllegalStateException("Idle Ball can't be moved left");
     }
 
-    public void ChangeBallType()
+    public void MoveRight()
+    {
+        throw new IllegalStateException("Idle Ball can't be moved right");
+    }
+
+    public void MoveUp()
+    {
+        throw new IllegalStateException("Idle Ball can't be moved up");
+    }
+
+    public void MoveDown()
+    {
+        throw new IllegalStateException("Idle Ball can't be moved down");
+    }
+
+
+    public void Activate()
     {
 
     }
 
     public void ChangeBallType(BallState ballState)
     {
-
+        super.ChangeBallType(ballState);
     }
 }
