@@ -1,5 +1,7 @@
 package Ball;
 
+import javax.swing.*;
+
 /**
  * Created by s.gockner on 26.06.2017.
  */
@@ -7,9 +9,9 @@ public class AnimatedBall extends Ball {
     private boolean _isAnimated = false;
     private Thread _animationThread = null;
 
-    public AnimatedBall(int positionX, int positionY, AnimationState animationState)
+    public AnimatedBall(double positionX, double positionY, int id, AnimationState animationState, JPanel gamePanel)
     {
-        super(BallState.animated, positionX, positionY);
+        super(BallState.animated, positionX, positionY, id, gamePanel);
         AnimationState = animationState;
 
         _isAnimated = true;
