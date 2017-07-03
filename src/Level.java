@@ -38,11 +38,29 @@ public class Level {
         return Balls;
     }
 
+    public Ball[] GetBallsSortedByID()
+    {
+        Ball[] balls = new Ball[Balls.length];
+
+        for (int i = 0; i < Balls.length; i++)
+        {
+            for (int j = 0; j < Balls.length; j++)
+            {
+                if (i+1 == Balls[j].GetInstance().GetID())
+                {
+                    balls[i] = Balls[j].GetInstance();
+                }
+            }
+        }
+
+        return balls;
+    }
+
     public Ball GetCurrentActiveBall()
     {
         for (int i = 0; i < Balls.length; i++)
         {
-            if (Balls[i].IsActivated())
+            if (Balls[i].GetInstance().IsActivated())
             {
                 return Balls[i];
             }

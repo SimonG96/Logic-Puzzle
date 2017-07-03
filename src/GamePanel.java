@@ -81,16 +81,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
             {
                 for (int i = 0; i < CurrentLevel.GetBalls().length; i++)
                 {
-                    if (CurrentLevel.GetBalls()[i].GetInstance().IsActivated())
+                    if (CurrentLevel.GetBallsSortedByID()[i].GetInstance().IsActivated())
                     {
-                        ((ControlledBall)CurrentLevel.GetBalls()[i].GetInstance()).Deactivate();
+                        ((ControlledBall)(CurrentLevel.GetBallsSortedByID()[i].GetInstance())).Deactivate();
                         if ((i+1) < (CurrentLevel.GetBalls().length))
                         {
-                            CurrentLevel.GetBalls()[i+1].GetInstance().Activate();
+                            CurrentLevel.GetBallsSortedByID()[i+1].GetInstance().Activate();
                         }
                         else
                         {
-                            CurrentLevel.GetBalls()[0].GetInstance().Activate();
+                            CurrentLevel.GetBallsSortedByID()[0].GetInstance().Activate();
                         }
 
                         return;
