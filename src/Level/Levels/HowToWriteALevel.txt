@@ -37,6 +37,13 @@ BallStates:
     controlled = 1
     animated = 2
     locked = 3
+	animated_locked = 4
+	
+AnimationStates:
+    horizontal = 0
+    vertical = 1
+    clockwise = 2
+    counterClockwise = 3
 	
 TileStates:	
     defaultTile = 0
@@ -45,5 +52,6 @@ TileStates:
     untouchable = 3
     gate = 4
     openGate = 5
+	unmovable = 6
 	
 FileName: Level + Levelnummer

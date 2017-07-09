@@ -7,7 +7,8 @@ Level
 	<AmountOfBalls>2;
 	
 	<Balls>
-		
+		1;2;6;1;3;2
+		0;7;6;2
 	</Balls>
 	
 	<Tiles>

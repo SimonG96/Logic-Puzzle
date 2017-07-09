@@ -1,13 +1,13 @@
 Level
 {
 	<Levelnumber>1;
-	<Tipp>'Use arrows or WASD to move.';
+	<Tipp>'Use arrows to move.';
 	<SizeX>10;
 	<SizeY>10;
-	<AmountOfBalls>2;
+	<AmountOfBalls>1;
 	
 	<Balls>
-		
+		1;1;8;1;0
 	</Balls>
 	
 	<Tiles>
