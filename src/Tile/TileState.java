@@ -9,5 +9,6 @@ public enum TileState {
     border,
     untouchable,
     gate,
-    openGate
+    openGate,
+    unmovable
 }
