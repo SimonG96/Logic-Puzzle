@@ -1,0 +1,49 @@
+Level //Alles innerhalb der Klammer Level{ } ist ein Level
+{	
+	//Tags <> die vorhanden sein müssen sind die folgenden:
+
+	<Levelnumber>; 			//Levelnummer, aufsteigend
+	<Tipp>''; 				//Level Tipp, Zeichenfolge zwischen ' '
+	<SizeX>; 				//Die Anzahl der Teile des Levels in der Breite
+	<SizeY>;				//Die Anzahl der Teile des Levels in der Höhe
+	<AmountOfBalls>;		//Die Anzahl der Bälle für das Level
+	
+	<Balls>					//Die genaue Definition der Bälle innerhalb <Balls> </Balls>, alle Attribute sind immer mit ; getrennt
+		0;1;1;1				//Für normalen Ball: BallState; X-Position des Balls (bezogen auf Teile); Y-Position des Balls (bezogen auf Teile); ID des Balls (aufsteigend, beginnend bei 1)
+		1;5;5;2;0			//Für Aktiven Ball: BallState; X-Position des Balls (bezogen auf Teile); Y-Position des Balls (bezogen auf Teile); ID des Balls (aufsteigend, beginnend bei 1); BallState den der Ball hat nachdem er deaktiviert wird
+	</Balls>				//Für Animierten Ball: BallState; X-Position des Balls (bezogen auf Teile); Y-Position des Balls (bezogen auf Teile); ID des Balls (aufsteigend, beginnend bei 1); AnimationState
+							//Für Animierten Ball der zum Start aktiviert ist: BallState; X-Position des Balls (bezogen auf Teile); Y-Position des Balls (bezogen auf Teile); ID des Balls (aufsteigend, beginnend bei 1); BallState den der Ball hat nachdem er deaktiviert wird (BallState.animated = 2); AnimationState
+							
+	
+	
+	
+	
+	<Tiles>						//Die Aufteilung der Teile innerhalb von <Tiles> </Tiles>
+		2;2;2;2;2;2;2;2;2;2		//Die einzelnen Teile, angegeben wird der TileState, getrennt mit ;
+		2;0;0;0;0;0;0;0;0;2		//Ausnahme: Gate und GateOpener: Angegeben wird: für Gate: TileState,ID ; für GateOpener: TileState,ID
+		2;0;0;0;0;0;0;0;0;2		//ID: gibt eine ID an, die für Gate und GateOpener gleich ist -> ordnet jedem Gate einen oder mehrere GateOpener zu (nicht mehrere Gates für einen GateOpener)
+		2;0;0;0;0;0;0;0;0;2
+		2;0;0;0;0;0;0;0;0;2
+		2;0;0;0;0;0;0;0;0;2
+		2;0;0;0;0;0;0;0;0;2
+		2;0;0;0;0;0;0;0;0;2
+		2;0;0;0;0;0;0;0;1;2
+		2;2;2;2;2;2;2;2;2;2
+	</Tiles>
+}
+
+BallStates: 
+	idle = 0
+    controlled = 1
+    animated = 2
+    locked = 3
+	
+TileStates:	
+    defaultTile = 0
+    target = 1
+    border = 2
+    untouchable = 3
+    gate = 4
+    openGate = 5
+	
+FileName: Level + Levelnummer
