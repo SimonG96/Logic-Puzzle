@@ -6,6 +6,7 @@ package Ball;
 public enum BallState {
     idle,
     controlled,
+    animated,
     locked,
-    animated
+    animated_locked
 }

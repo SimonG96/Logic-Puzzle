@@ -1,54 +1,203 @@
+
 package Ball;
 
-import javax.swing.*;
+import GamePanel.GamePanel;
+
 
 /**
  * Created by s.gockner on 26.06.2017.
  */
-public class AnimatedBall extends Ball {
-    private boolean _isAnimated = false;
-    private Thread _animationThread = null;
 
-    public AnimatedBall(double positionX, double positionY, int id, AnimationState animationState, JPanel gamePanel)
-    {
-        super(BallState.animated, positionX, positionY, id, gamePanel);
-        AnimationState = animationState;
+public class AnimatedBall extends Ball {
+    protected boolean _isAnimated = false;
+
+    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, AnimationState currentAnimationState, GamePanel gamePanel) {
+        super(ballState, positionX, positionY, id, gamePanel);
+        CurrentAnimationState = currentAnimationState;
+
+        SetCurrentAnimationDirection(currentAnimationState);
 
         _isAnimated = true;
-        _animationThread = new Thread(() -> Animate());
-        _animationThread.run();
     }
 
-    private AnimationState AnimationState;
+    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, GamePanel gamePanel, BallState previousBallState, AnimationState currentAnimationState)
+    {
+        super(ballState, positionX, positionY, id, gamePanel, previousBallState);
+        CurrentAnimationState = currentAnimationState;
+
+        SetCurrentAnimationDirection(currentAnimationState);
+
+        _isAnimated = false;
+    }
+
+    protected AnimationState CurrentAnimationState;
 
     public AnimationState GetAnimationState()
     {
-        return AnimationState;
+        return CurrentAnimationState;
     }
 
-    public void Animate()
+    protected AnimationDirection CurrentAnimationDirection;
+
+    public AnimationDirection GetCurrentAnimationDirection()
     {
-        while (_isAnimated)
+        return CurrentAnimationDirection;
+    }
+
+    public void Animate() {
+        if (_isAnimated)
         {
-            switch (AnimationState)
+            switch (CurrentAnimationState)
             {
                 case horizontal:
                 {
+                    if (CurrentAnimationDirection == AnimationDirection.right)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.left;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.left)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.right;
+                        }
+                    }
 
                     break;
                 }
                 case vertical:
                 {
+                    if (CurrentAnimationDirection == AnimationDirection.up)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.down;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.down)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.up;
+                        }
+                    }
 
                     break;
                 }
                 case clockwise:
                 {
+                    if (CurrentAnimationDirection == AnimationDirection.right)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.down;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.left)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.up;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.up)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.right;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.down)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.left;
+                        }
+                    }
 
                     break;
                 }
                 case counterClockwise:
                 {
+                    if (CurrentAnimationDirection == AnimationDirection.right)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.up;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.left)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        {
+                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.down;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.up)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else //movement == 0 -> Hit a border
+                        {
+                            CurrentAnimationDirection = AnimationDirection.left;
+                        }
+                    }
+                    else if (CurrentAnimationDirection == AnimationDirection.down)
+                    {
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        {
+                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                        }
+                        else
+                        {
+                            CurrentAnimationDirection = AnimationDirection.right;
+                        }
+                    }
 
                     break;
                 }
@@ -59,18 +208,40 @@ public class AnimatedBall extends Ball {
                 }
             }
         }
-
-        _animationThread.interrupt();
     }
 
-    public void Activate()
+    protected void SetCurrentAnimationDirection(AnimationState animationState)
     {
+        switch (animationState) {
+            case horizontal: {
+                CurrentAnimationDirection = AnimationDirection.right;
+                break;
+            }
+            case vertical: {
+                CurrentAnimationDirection = AnimationDirection.down;
+                break;
+            }
+            case clockwise: {
+                CurrentAnimationDirection = AnimationDirection.right;
+                break;
+            }
+            case counterClockwise: {
+                CurrentAnimationDirection= AnimationDirection.left;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void Activate() {
+        super.Activate();
         _isAnimated = false;
-
     }
 
-    public void ChangeBallType(BallState ballState)
-    {
-        super.ChangeBallType(ballState);
+    @Override
+    public void Deactivate() {
+        super.Deactivate();
+        _isAnimated = true;
     }
 }
+

@@ -4,22 +4,14 @@ import GamePanel.GamePanel;
 
 import java.util.ArrayList;
 
-
 /**
- * Created by s.gockner on 26.06.2017.
+ * Created by Acer on 09.07.2017.
  */
-
-public class LockedBall extends Ball {
-    public LockedBall(int positionX, int positionY, int id, GamePanel gamePanel, int[] partnerBallIDs)
+public class AnimatedLockedBall extends AnimatedBall {
+    public AnimatedLockedBall(int positionX, int positionY, int id, AnimationState currentAnimationState, GamePanel gamePanel, int[] partnerBallIDs)
     {
-        super(BallState.locked, positionX, positionY, id, gamePanel);
-        PartnerBallIDs = partnerBallIDs;
-        PartnerBalls = null;
-    }
+        super(BallState.animated_locked, positionX, positionY, id, currentAnimationState, gamePanel);
 
-    public LockedBall(BallState ballState, int positionX, int positionY, int id, GamePanel gamePanel, BallState previousBallState, int[] partnerBallIDs)
-    {
-        super(ballState, positionX, positionY, id, gamePanel, previousBallState);
         PartnerBallIDs = partnerBallIDs;
         PartnerBalls = null;
     }
@@ -88,4 +80,3 @@ public class LockedBall extends Ball {
         return partnerBalls;
     }
 }
-
