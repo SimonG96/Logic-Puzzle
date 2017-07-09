@@ -1,4 +1,4 @@
-import Ball.*;
+import GamePanel.GamePanel;
 
 /**
  * Created by Acer on 26.06.2017.
