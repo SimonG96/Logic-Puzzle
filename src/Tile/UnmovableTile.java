@@ -13,19 +13,4 @@ public class UnmovableTile extends Tile{
         super(TileState.unmovable, positionX, positionY);
         LoadImage(IMAGE);
     }
-
-    /*public void CheckForCollision(Ball[] balls)
-    {
-        for (int i = 0; i < balls.length; i++)
-        {
-            if (this.getBounds2D().intersects(balls[i].getBounds2D()))
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-    }*/
 }

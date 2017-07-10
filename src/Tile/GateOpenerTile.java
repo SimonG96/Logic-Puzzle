@@ -13,39 +13,51 @@ public class GateOpenerTile extends Tile {
         super(TileState.openGate, positionX, positionY);
 
         ID = id;
+        GateTile = null;
 
         LoadImage(IMAGE);
     }
 
     private int ID;
+    private GateTile GateTile;
 
     public int GetID()
     {
         return ID;
     }
 
-    public boolean CheckForCollision(GateTile gateTile, Ball[] balls)
+    public GateTile GetGateTile()
+    {
+        return GateTile;
+    }
+
+    public void SetGateTile(GateTile gateTile)
+    {
+        GateTile = gateTile;
+    }
+
+    public boolean CheckForCollision(Ball[] balls)
     {
         boolean collision = false;
 
         for (int i = 0; i < balls.length; i++)
         {
-            if (this.getBounds2D().intersects(balls[i].getBounds2D()))
+            if (this.Intersects(balls[i]))
             {
                 collision = true;
 
-                if (!gateTile.GetIsOpened())
+                if (!GateTile.GetIsOpened())
                 {
-                    gateTile.OpenGate();
+                    GateTile.OpenGate();
                 }
             }
         }
 
         if (!collision)
         {
-            if (gateTile.GetIsOpened() && !gateTile.CheckForCollision(balls))
+            if (GateTile.GetIsOpened() && !GateTile.CheckForCollision(balls))
             {
-                gateTile.CloseGate();
+                GateTile.CloseGate();
             }
         }
 

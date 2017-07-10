@@ -18,7 +18,7 @@ public class UntouchableTile extends Tile {
     {
         for (int i = 0; i < balls.length; i++)
         {
-            if (this.getBounds2D().intersects(balls[i].getBounds2D()))
+            if (this.Intersects(balls[i]))
             {
                 balls[i].Deactivate();
                 return true;
