@@ -4,7 +4,7 @@ import Tile.*;
 import GamePanel.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -13,17 +13,17 @@ import java.util.ArrayList;
 /**
  * Created by s.gockner on 26.06.2017.
  */
-public class Ball extends Ellipse2D.Double{
+public class Ball extends Rectangle2D.Double{
 
-    private final String IMAGE_PATH_CONTROLLED = "Textures\\acid_ball_standard_small.png";
-    private final String IMAGE_PATH_IDLE = "Textures\\acid_ball_wallhit_small.png";
+    private final String IMAGE_PATH_CONTROLLED = "Textures\\acid_ball_wallhit_small.png";
+    private final String IMAGE_PATH_IDLE = "Textures\\acid_ball_wallhit_sw_small.png";
 
     public final static int BALL_HEIGHT = 40;
     public final static int BALL_WIDTH = 40;
 
-    public Ball(BallState currentBallState, int positionX, int positionY, int id, GamePanel gamePanel)
+    public Ball(BallState currentBallState, int positionX, int positionY, int id, LevelPanel levelPanel)
     {
-        GamePanel = gamePanel;
+        LevelPanel = levelPanel;
 
         CurrentBallState = currentBallState;
         PreviousBallState = currentBallState;
@@ -41,15 +41,15 @@ public class Ball extends Ellipse2D.Double{
         LoadImage();
     }
 
-    public Ball(BallState currentBallState, int positionX, int positionY, int id, GamePanel gamePanel, BallState previousBallState)
+    public Ball(BallState currentBallState, int positionX, int positionY, int id, LevelPanel levelPanel, BallState previousBallState)
     {
-        this(currentBallState, positionX, positionY, id, gamePanel);
+        this(currentBallState, positionX, positionY, id, levelPanel);
         PreviousBallState = previousBallState;
         FirstActivatedBall = true;
     }
 
 
-    protected GamePanel GamePanel;
+    protected LevelPanel LevelPanel;
     protected final int ID;
     protected BallState CurrentBallState;
     protected BallState PreviousBallState;
@@ -83,6 +83,11 @@ public class Ball extends Ellipse2D.Double{
     public int GetStartingPositionY()
     {
         return StartingPositionY;
+    }
+
+    public BufferedImage GetImage()
+    {
+        return Image;
     }
 
     public boolean IsFirstActivatedBall()
@@ -130,9 +135,9 @@ public class Ball extends Ellipse2D.Double{
 
     public double GetCorrectMovementByCheckingCollisionWithBorder(double movement, boolean isHorizontal)
     {
-        ArrayList<Tile> tiles = GamePanel.GetCurrentLevel().GetTilesByTileState(TileState.border);
-        ArrayList<Tile> unmovableTiles = GamePanel.GetCurrentLevel().GetTilesByTileState(TileState.unmovable);
-        ArrayList<Tile> gates = GamePanel.GetCurrentLevel().GetTilesByTileState(TileState.gate);
+        ArrayList<Tile> tiles = LevelPanel.GetCurrentLevel().GetTilesByTileState(TileState.border);
+        ArrayList<Tile> unmovableTiles = LevelPanel.GetCurrentLevel().GetTilesByTileState(TileState.unmovable);
+        ArrayList<Tile> gates = LevelPanel.GetCurrentLevel().GetTilesByTileState(TileState.gate);
 
         if (gates.size() != 0)
         {
@@ -213,7 +218,7 @@ public class Ball extends Ellipse2D.Double{
 
         for (int i = 0; i < unmovableTiles.size(); i++)
         {
-            if (this.getBounds2D().intersects(unmovableTiles.get(i).getBounds2D()))
+            if (this.Intersects(unmovableTiles.get(i)))
             {
                 collision = true;
                 IsMovable = false;
@@ -285,5 +290,79 @@ public class Ball extends Ellipse2D.Double{
             CurrentBallState = PreviousBallState;
             LoadImage();
         }
+    }
+
+    public boolean Intersects(Tile tile)
+    {
+        Rectangle2D.Double cut = (Double) this.createIntersection(tile.getBounds2D());
+
+        if (cut.width < 1 || cut.height < 1)
+        {
+            return false;
+        }
+
+        Rectangle2D.Double sub_this = GetSubRectangle(this, cut);
+        Rectangle2D.Double sub_tile = GetSubRectangle(tile, cut);
+
+        BufferedImage img_this = Image.getSubimage((int) sub_this.x, (int) sub_this.y, (int) sub_this.width, (int) sub_this.height);
+        BufferedImage img_tile = tile.GetImage().getSubimage((int) sub_tile.x, (int) sub_tile.y, (int) sub_tile.width, (int) sub_tile.height);
+
+
+        for (int i=0; i < img_this.getWidth(); i++)
+        {
+            for (int j=0; j < img_tile.getHeight(); j++)
+            {
+                int rgb1 = img_this.getRGB(i, j);
+                int rgb2 = img_tile.getRGB(i, j);
+
+                if (IsOpaque(rgb1) && IsOpaque(rgb2)) //check if at specific pixel on both Images the color is different to white -> if true -> collision
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected Rectangle2D.Double GetSubRectangle(Rectangle2D.Double source, Rectangle2D.Double part)
+    {
+        //get parts of both rectangles that could collide
+        Rectangle2D.Double sub = new Rectangle2D.Double();
+
+        if (source.x > part.x)
+        {
+            sub.x = 0;
+        }
+        else
+        {
+            sub.x = part.x-source.x;
+        }
+
+        if (source.y > part.y)
+        {
+            sub.y = 0;
+        }
+        else
+        {
+            sub.y = part.y - source.y;
+        }
+
+        sub.width = part.width;
+        sub.height = part.height;
+
+        return sub;
+    }
+
+    protected boolean IsOpaque(int rgb)
+    {
+        int alpha = (rgb >> 24) & 0xff; //shift rgb bits 24 digits to the right and bitwise and with white
+
+        if (alpha == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,6 +1,6 @@
 package Ball;
 
-import GamePanel.GamePanel;
+import GamePanel.LevelPanel;
 
 import java.util.ArrayList;
 
@@ -10,16 +10,16 @@ import java.util.ArrayList;
  */
 
 public class LockedBall extends Ball {
-    public LockedBall(int positionX, int positionY, int id, GamePanel gamePanel, int[] partnerBallIDs)
+    public LockedBall(int positionX, int positionY, int id, LevelPanel levelPanel, int[] partnerBallIDs)
     {
-        super(BallState.locked, positionX, positionY, id, gamePanel);
+        super(BallState.locked, positionX, positionY, id, levelPanel);
         PartnerBallIDs = partnerBallIDs;
         PartnerBalls = null;
     }
 
-    public LockedBall(BallState ballState, int positionX, int positionY, int id, GamePanel gamePanel, BallState previousBallState, int[] partnerBallIDs)
+    public LockedBall(BallState ballState, int positionX, int positionY, int id, LevelPanel levelPanel, BallState previousBallState, int[] partnerBallIDs)
     {
-        super(ballState, positionX, positionY, id, gamePanel, previousBallState);
+        super(ballState, positionX, positionY, id, levelPanel, previousBallState);
         PartnerBallIDs = partnerBallIDs;
         PartnerBalls = null;
     }
@@ -76,11 +76,11 @@ public class LockedBall extends Ball {
         ArrayList<Ball> partnerBalls = new ArrayList<Ball>();
         for (int i = 0; i < PartnerBallIDs.length; i++)
         {
-            for (int ballsCounter = 0; ballsCounter < GamePanel.GetCurrentLevel().GetBalls().length; ballsCounter++)
+            for (int ballsCounter = 0; ballsCounter < LevelPanel.GetCurrentLevel().GetBalls().length; ballsCounter++)
             {
-                if (PartnerBallIDs[i] == GamePanel.GetCurrentLevel().GetBalls()[ballsCounter].GetID())
+                if (PartnerBallIDs[i] == LevelPanel.GetCurrentLevel().GetBalls()[ballsCounter].GetID())
                 {
-                    partnerBalls.add(GamePanel.GetCurrentLevel().GetBalls()[ballsCounter]);
+                    partnerBalls.add(LevelPanel.GetCurrentLevel().GetBalls()[ballsCounter]);
                 }
             }
         }

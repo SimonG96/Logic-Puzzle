@@ -1,6 +1,6 @@
 package Ball;
 
-import GamePanel.GamePanel;
+import GamePanel.LevelPanel;
 
 import java.util.ArrayList;
 
@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * Created by Acer on 09.07.2017.
  */
 public class AnimatedLockedBall extends AnimatedBall {
-    public AnimatedLockedBall(int positionX, int positionY, int id, AnimationState currentAnimationState, GamePanel gamePanel, int[] partnerBallIDs)
+    public AnimatedLockedBall(int positionX, int positionY, int id, AnimationState currentAnimationState, LevelPanel levelPanel, int[] partnerBallIDs)
     {
-        super(BallState.animated_locked, positionX, positionY, id, currentAnimationState, gamePanel);
+        super(BallState.animated_locked, positionX, positionY, id, currentAnimationState, levelPanel);
 
         PartnerBallIDs = partnerBallIDs;
         PartnerBalls = null;
@@ -68,11 +68,11 @@ public class AnimatedLockedBall extends AnimatedBall {
         ArrayList<Ball> partnerBalls = new ArrayList<Ball>();
         for (int i = 0; i < PartnerBallIDs.length; i++)
         {
-            for (int ballsCounter = 0; ballsCounter < GamePanel.GetCurrentLevel().GetBalls().length; ballsCounter++)
+            for (int ballsCounter = 0; ballsCounter < LevelPanel.GetCurrentLevel().GetBalls().length; ballsCounter++)
             {
-                if (PartnerBallIDs[i] == GamePanel.GetCurrentLevel().GetBalls()[ballsCounter].GetID())
+                if (PartnerBallIDs[i] == LevelPanel.GetCurrentLevel().GetBalls()[ballsCounter].GetID())
                 {
-                    partnerBalls.add(GamePanel.GetCurrentLevel().GetBalls()[ballsCounter]);
+                    partnerBalls.add(LevelPanel.GetCurrentLevel().GetBalls()[ballsCounter]);
                 }
             }
         }

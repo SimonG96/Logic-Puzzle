@@ -1,7 +1,7 @@
 
 package Ball;
 
-import GamePanel.GamePanel;
+import GamePanel.LevelPanel;
 
 
 /**
@@ -11,8 +11,8 @@ import GamePanel.GamePanel;
 public class AnimatedBall extends Ball {
     protected boolean _isAnimated = false;
 
-    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, AnimationState currentAnimationState, GamePanel gamePanel) {
-        super(ballState, positionX, positionY, id, gamePanel);
+    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, AnimationState currentAnimationState, LevelPanel levelPanel) {
+        super(ballState, positionX, positionY, id, levelPanel);
         CurrentAnimationState = currentAnimationState;
 
         SetCurrentAnimationDirection(currentAnimationState);
@@ -20,9 +20,9 @@ public class AnimatedBall extends Ball {
         _isAnimated = true;
     }
 
-    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, GamePanel gamePanel, BallState previousBallState, AnimationState currentAnimationState)
+    public AnimatedBall(BallState ballState, int positionX, int positionY, int id, LevelPanel levelPanel, BallState previousBallState, AnimationState currentAnimationState)
     {
-        super(ballState, positionX, positionY, id, gamePanel, previousBallState);
+        super(ballState, positionX, positionY, id, levelPanel, previousBallState);
         CurrentAnimationState = currentAnimationState;
 
         SetCurrentAnimationDirection(currentAnimationState);
@@ -53,9 +53,9 @@ public class AnimatedBall extends Ball {
                 {
                     if (CurrentAnimationDirection == AnimationDirection.right)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -64,9 +64,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.left)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else
                         {
@@ -80,9 +80,9 @@ public class AnimatedBall extends Ball {
                 {
                     if (CurrentAnimationDirection == AnimationDirection.up)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(-LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -91,9 +91,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.down)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else
                         {
@@ -107,9 +107,9 @@ public class AnimatedBall extends Ball {
                 {
                     if (CurrentAnimationDirection == AnimationDirection.right)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -118,9 +118,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.left)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else
                         {
@@ -129,9 +129,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.up)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(-LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -140,9 +140,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.down)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else
                         {
@@ -156,9 +156,9 @@ public class AnimatedBall extends Ball {
                 {
                     if (CurrentAnimationDirection == AnimationDirection.right)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -167,9 +167,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.left)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL, true) != 0)
                         {
-                            MoveHorizontal(-GamePanel.MOVEMENT_SPEED_HORIZONTAL);
+                            MoveHorizontal(-LevelPanel.MOVEMENT_SPEED_HORIZONTAL);
                         }
                         else
                         {
@@ -178,9 +178,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.up)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(-GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(-LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(-GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(-LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else //movement == 0 -> Hit a border
                         {
@@ -189,9 +189,9 @@ public class AnimatedBall extends Ball {
                     }
                     else if (CurrentAnimationDirection == AnimationDirection.down)
                     {
-                        if (GetCorrectMovementByCheckingCollisionWithBorder(GamePanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
+                        if (GetCorrectMovementByCheckingCollisionWithBorder(LevelPanel.MOVEMENT_SPEED_VERTICAL, false) != 0)
                         {
-                            MoveVertical(GamePanel.MOVEMENT_SPEED_VERTICAL);
+                            MoveVertical(LevelPanel.MOVEMENT_SPEED_VERTICAL);
                         }
                         else
                         {
