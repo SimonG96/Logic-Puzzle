@@ -36,7 +36,7 @@ public class LevelPanel extends JPanel implements Runnable, KeyListener{
 
         LevelHelper levelHelper = new LevelHelper();
         levelHelper.ReadLevels(this);
-        CurrentLevel = LevelHelper.LEVELS.get(0); //TODO only for testing right now
+        CurrentLevel = LevelHelper.LEVELS.get(0);
 
         HeaderLabelText = CurrentLevel.GetTipp() + " | " + Deaths + " Deaths | Level " + CurrentLevel.GetLevelNumber();
         HeaderLabel = new JLabel(HeaderLabelText);
