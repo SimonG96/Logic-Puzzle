@@ -56,6 +56,24 @@ public class Level {
         return tiles;
     }
 
+    public ArrayList<GateOpenerTile> GetGateOpenerTilesForOneGate(int id)
+    {
+        ArrayList<GateOpenerTile> gateOpenerTilesForGate = new ArrayList<GateOpenerTile>();
+
+        ArrayList<Tile> gateOpenerTiles = GetTilesByTileState(TileState.openGate);
+
+        for (int i = 0; i < gateOpenerTiles.size(); i++)
+        {
+            GateOpenerTile gateOpenerTile = (GateOpenerTile) gateOpenerTiles.get(i);
+            if (gateOpenerTile.GetID() == id)
+            {
+                gateOpenerTilesForGate.add(gateOpenerTile);
+            }
+        }
+
+        return gateOpenerTilesForGate;
+    }
+
     public GateTile GetGateByID(int id)
     {
         GateTile gateTile = null;

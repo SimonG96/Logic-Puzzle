@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class LevelHelper {
     public static ArrayList<Level> LEVELS;
 
-    public void ReadLevels(GamePanel gamePanel)
+    public void ReadLevels(LevelPanel levelPanel)
     {
         LEVELS = new ArrayList<Level>();
 
@@ -92,7 +92,7 @@ public class LevelHelper {
                     line = bufferedReader.readLine();
 
                     do {
-                        balls[ballCount] = ReadBallLine(line, gamePanel);
+                        balls[ballCount] = ReadBallLine(line, levelPanel);
                         line = bufferedReader.readLine();
                         ballCount++;
                     } while (!line.contains("</Balls>"));
@@ -107,7 +107,7 @@ public class LevelHelper {
                     line = bufferedReader.readLine();
 
                     do {
-                        tiles[tilesYCount] = ReadTileLine(line, sizeX, tilesYCount, gamePanel);
+                        tiles[tilesYCount] = ReadTileLine(line, sizeX, tilesYCount, levelPanel);
                         line = bufferedReader.readLine();
                         tilesYCount++;
                     } while (!line.contains("</Tiles>"));
@@ -122,7 +122,7 @@ public class LevelHelper {
         } while (url != null);
     }
 
-    private static Ball ReadBallLine(String line, GamePanel gamePanel)
+    private static Ball ReadBallLine(String line, LevelPanel levelPanel)
     {
         line = line.replaceAll("\\t", "").replaceAll("\\n", "");
         String[] ballSplit = line.split(";");
@@ -139,7 +139,7 @@ public class LevelHelper {
             if (prevBallState == BallState.animated)
             {
                 AnimationState animationState = AnimationState.values()[Integer.parseInt(ballSplit[5])];
-                return new AnimatedBall(ballState, positionX, positionY, id, gamePanel, prevBallState, animationState);
+                return new AnimatedBall(ballState, positionX, positionY, id, levelPanel, prevBallState, animationState);
             }
             else if (prevBallState == BallState.locked)
             {
@@ -149,17 +149,17 @@ public class LevelHelper {
                     ballIDs[i-5] = Integer.parseInt(ballSplit[i]);
                 }
 
-                return new LockedBall(ballState, positionX, positionY, id, gamePanel, prevBallState, ballIDs);
+                return new LockedBall(ballState, positionX, positionY, id, levelPanel, prevBallState, ballIDs);
             }
             else
             {
-                return new Ball(ballState, positionX, positionY, id, gamePanel, prevBallState);
+                return new Ball(ballState, positionX, positionY, id, levelPanel, prevBallState);
             }
         }
         else if (ballState == BallState.animated)
         {
             AnimationState animationState = AnimationState.values()[Integer.parseInt(ballSplit[4])];
-            return new AnimatedBall(ballState, positionX, positionY, id, animationState, gamePanel);
+            return new AnimatedBall(ballState, positionX, positionY, id, animationState, levelPanel);
         }
         else if (ballState == BallState.locked)
         {
@@ -169,7 +169,7 @@ public class LevelHelper {
                 ballIDs[i-4] = Integer.parseInt(ballSplit[i]);
             }
 
-            return new LockedBall(positionX, positionY, id, gamePanel, ballIDs);
+            return new LockedBall(positionX, positionY, id, levelPanel, ballIDs);
         }
         else if (ballState == BallState.animated_locked)
         {
@@ -181,15 +181,15 @@ public class LevelHelper {
                 ballIDs[i-5] = Integer.parseInt(ballSplit[i]);
             }
 
-            return new AnimatedLockedBall(positionX, positionY, id, animationState, gamePanel, ballIDs);
+            return new AnimatedLockedBall(positionX, positionY, id, animationState, levelPanel, ballIDs);
         }
         else
         {
-            return new Ball(ballState, positionX, positionY, id, gamePanel);
+            return new Ball(ballState, positionX, positionY, id, levelPanel);
         }
     }
 
-    private static Tile[] ReadTileLine(String line, int sizeX, int yCount, GamePanel gamePanel)
+    private static Tile[] ReadTileLine(String line, int sizeX, int yCount, LevelPanel levelPanel)
     {
         Tile[] tileLine = new Tile[sizeX];
 
