@@ -8,14 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 /**
  * Created by Acer on 03.07.2017.
  */
-public class GamePanel extends JPanel implements Runnable, KeyListener{
-    public final int MOVEMENT_SPEED_HORIZONTAL = 2;
-    public final int MOVEMENT_SPEED_VERTICAL = 2;
+public class LevelPanel extends JPanel implements Runnable, KeyListener{
+    public final double MOVEMENT_SPEED_HORIZONTAL = 1.7;
+    public final double MOVEMENT_SPEED_VERTICAL = 1.7;
 
     private Thread _mainThread;
     private boolean _isUpPressed;
@@ -23,25 +24,34 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
     private boolean _isLeftPressed;
     private boolean _isRightPressed;
 
-    public GamePanel(int width, int height) {
-        this.setPreferredSize(new Dimension(width, height));
+    public LevelPanel(int width, int height) {
+        //this.setPreferredSize(new Dimension(width, height));
 
         Frame = new JFrame("LogicPuzzle");
         Frame.setLocation(100, 100);
+        Frame.setPreferredSize(new Dimension(width, height));
         Frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        Frame.add(this);
-        Frame.addKeyListener(this);
-        Frame.pack();
-        Frame.setVisible(true);
+
+        Deaths = 0;
 
         LevelHelper levelHelper = new LevelHelper();
         levelHelper.ReadLevels(this);
         CurrentLevel = LevelHelper.LEVELS.get(0); //TODO only for testing right now
 
+        HeaderLabelText = CurrentLevel.GetTipp() + " | " + Deaths + " Deaths | Level " + CurrentLevel.GetLevelNumber();
+        HeaderLabel = new JLabel(HeaderLabelText);
+        Frame.add(HeaderLabel, BorderLayout.BEFORE_FIRST_LINE);
+        Frame.add(this, BorderLayout.CENTER);
+        Frame.addKeyListener(this);
+        Frame.pack();
+        Frame.setVisible(true);
+
         _mainThread = new Thread(this);
         _mainThread.start();
     }
 
+    private JLabel HeaderLabel;
+    private String HeaderLabelText;
     private JFrame Frame;
     private Level CurrentLevel;
     private int Deaths;
@@ -235,15 +245,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
         }
     }
 
-    private void ResetKeyboardInputs()
+    private void ResetKeyPressed()
     {
-        _isUpPressed = false;
-        _isDownPressed = false;
-        _isLeftPressed = false;
-        _isRightPressed = false;
-
-        //MOVEMENT_SPEED_HORIZONTAL = 0;
-        //MOVEMENT_SPEED_VERTICAL = 0;
+        while (_isUpPressed || _isDownPressed || _isRightPressed || _isLeftPressed)
+        {
+            try
+            {
+                Robot robot = new Robot();
+                robot.keyRelease(KeyEvent.VK_UP);
+                robot.keyRelease(KeyEvent.VK_DOWN);
+                robot.keyRelease(KeyEvent.VK_LEFT);
+                robot.keyRelease(KeyEvent.VK_RIGHT);
+            }
+            catch (AWTException ex)
+            {
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 
     private void CheckForEndOfLevel()
@@ -254,19 +272,21 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
             TargetTile targetTile = (TargetTile) targetTiles.get(i);
             if (targetTile.CheckForCollision(CurrentLevel.GetBalls()))
             {
-                ResetKeyboardInputs();
-
                 int levelNumber = CurrentLevel.GetLevelNumber();
                 if (LevelHelper.LEVELS.size() > levelNumber)
                 {
-                    //CurrentLevel = null;
-                    //JOptionPane.showMessageDialog(this, "Level Completed. Try Level " + (levelNumber+1), "Level Completed", JOptionPane.INFORMATION_MESSAGE);
+                    CurrentLevel = null;
+                    JOptionPane.showMessageDialog(this, "Level Completed. Try Level " + (levelNumber+1), "Level Completed", JOptionPane.INFORMATION_MESSAGE);
                     CurrentLevel = LevelHelper.LEVELS.get(levelNumber);
+                    HeaderLabelText = CurrentLevel.GetTipp() + " | " + Deaths + " Deaths | Level " + CurrentLevel.GetLevelNumber();
+                    HeaderLabel.setText(HeaderLabelText);
+
+                    ResetKeyPressed();
                 }
                 else
                 {
                     JOptionPane.showMessageDialog(this, "Congratulations! You have beaten the Game!", "Game Finished", JOptionPane.INFORMATION_MESSAGE);
-                    
+                    Frame.dispatchEvent(new WindowEvent(Frame, WindowEvent.WINDOW_CLOSING));
                 }
 
                 break;
@@ -285,7 +305,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
                 if (untouchableTile.CheckForCollision(CurrentLevel.GetBalls()))
                 {
                     CurrentLevel.RestartLevel();
+                    Deaths++;
+                    HeaderLabelText = CurrentLevel.GetTipp() + " | " + Deaths + " Deaths | Level " + CurrentLevel.GetLevelNumber();
+                    HeaderLabel.setText(HeaderLabelText);
                     JOptionPane.showMessageDialog(this, "You died!", "Dead", JOptionPane.INFORMATION_MESSAGE);
+                    ResetKeyPressed();
                 }
             }
         }
@@ -293,16 +317,29 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 
     private void CheckForCollisionWithGateOpenerTile()
     {
-        ArrayList<Tile> gateOpenerTiles = CurrentLevel.GetTilesByTileState(TileState.openGate);
-        if (gateOpenerTiles.size() != 0)
+        ArrayList<Tile> gateTiles = CurrentLevel.GetTilesByTileState(TileState.gate);
+        if (gateTiles.size() != 0)
         {
-            for (int i = 0; i < gateOpenerTiles.size(); i++)
+            for (int i = 0; i < gateTiles.size(); i++)
             {
-                GateOpenerTile gateOpenerTile = (GateOpenerTile) gateOpenerTiles.get(i);
-                if (gateOpenerTile.CheckForCollision(CurrentLevel.GetGateByID(gateOpenerTile.GetID()), CurrentLevel.GetBalls()))
+                GateTile gateTile = (GateTile) gateTiles.get(i);
+                ArrayList<GateOpenerTile> gateOpenerTiles = CurrentLevel.GetGateOpenerTilesForOneGate(gateTile.GetID());
+
+                for (int gateOpenerCount = 0; gateOpenerCount < gateOpenerTiles.size(); gateOpenerCount++)
                 {
-                    break;
+                    GateOpenerTile gateOpenerTile = gateOpenerTiles.get(gateOpenerCount);
+
+                    if (gateOpenerTile.GetGateTile() == null)
+                    {
+                        gateOpenerTile.SetGateTile(CurrentLevel.GetGateByID(gateOpenerTile.GetID()));
+                    }
+
+                    if (gateOpenerTile.CheckForCollision(CurrentLevel.GetBalls()))
+                    {
+                        break;
+                    }
                 }
+
             }
         }
     }
@@ -312,12 +349,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
         ArrayList<Tile> unmovableTiles = CurrentLevel.GetTilesByTileState(TileState.unmovable);
         if (unmovableTiles.size() != 0)
         {
-            /*for (int i = 0; i < unmovableTiles.size(); i++)
-            {
-                UnmovableTile unmovableTile = (UnmovableTile) unmovableTiles.get(i);
-                unmovableTile.CheckForCollision(CurrentLevel.GetBalls());
-            }*/
-
             for (int i = 0; i < CurrentLevel.GetBalls().length; i++)
             {
                 CurrentLevel.GetBalls()[i].CheckForCollisionWithUnmovableTile(unmovableTiles);
@@ -336,17 +367,4 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
             }
         }
     }
-
-    /*private void ReadLevels()
-    {
-        //TODO only for testing right now
-        LEVELS = new Levels.Level[1];
-        Ball[] balls = new Ball[2];
-        balls[0] = new Ball(BallState.controlled, 1,1,1, this, BallState.idle);
-        balls[1] = new Ball(BallState.idle, 100,200,2, this);
-        Tile[][] tiles = {
-                { new BorderTile(0,0), new BorderTile(0,1), new BorderTile(0,2)}
-        };
-        LEVELS[0] = new Levels.Level(1, tiles, balls, "", 10, 10);
-    }*/
 }
